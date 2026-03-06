@@ -1,0 +1,4 @@
+# external.desc
+name: project_base
+packages: package
+configs: configs
