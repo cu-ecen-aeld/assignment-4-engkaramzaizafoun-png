@@ -9,7 +9,8 @@ jobs:
     full-test:
         container: 
             image: cuaesd/aesd-autotest:24-assignment4-buildroot
-            options: --memory 8gb --cpus 2
+    
+            options: --memory 8gb --cpus 2 --shm-size=1G
         runs-on: self-hosted
         timeout-minutes: 120
         steps:
