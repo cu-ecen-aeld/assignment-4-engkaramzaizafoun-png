@@ -7,20 +7,33 @@ on:
             - '*'
 jobs:
     full-test:
-        container: cuaesd/aesd-autotest:24-assignment4-buildroot
+        container: 
+            image: cuaesd/aesd-autotest:24-assignment4-buildroot
+            options: --memory 8gb --cpus 4
         runs-on: self-hosted
         timeout-minutes: 120
         steps:
+          - name: Free up disk space
+            run: |
+              df -h
+              rm -rf /tmp/* || true
+              sudo apt-get clean || true
+              df -h
+          
           - uses: actions/checkout@v2
+          
           - name: Checkout submodules
             run: git submodule update --init --recursive
+          
           - uses: webfactory/ssh-agent@v0.5.3
             with:
                 ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
           - name: Run full test
             env:
               GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
             run: ./full-test.sh
+          
           - name: Cleanup
             if: always()
             run: |
